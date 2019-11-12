@@ -149,7 +149,7 @@ QDomElement LblEngine::newText(QString x, QString y, QString w, QString h, QStri
     l.setAttribute("a5",0);
     QDomElement span = doc->createElement("Span");
     span.setAttribute("color","0x000000ff");
-    span.setAttribute("font_family","Arial");
+    span.setAttribute("font_family","Liberation Sans");
     span.setAttribute("font_size",size);
     span.setAttribute("font_weight",bold ? "Bold" : "Regular");
     span.setAttribute("font_italic","False");
