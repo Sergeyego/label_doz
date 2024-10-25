@@ -44,11 +44,9 @@ class ModelRab : public QSqlQueryModel
 {
     Q_OBJECT
 public:
-    explicit ModelRab(int id_rab, QObject *parent = 0);
-private:
-    int id;
+    explicit ModelRab(QObject *parent = 0);
 public slots:
-    void refresh();
+    void refresh(QDate date, QString prof);
 };
 
 #endif // MODEL_H

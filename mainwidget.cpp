@@ -10,16 +10,19 @@ MainWidget::MainWidget(QWidget *parent) :
     ui->dateEditEnd->setDate(QDate::currentDate());
     ui->dateEditDoz->setDate(QDate::currentDate());    
     modelDoz = new ModelDoz(this);
-    ui->tableViewDoz->setModel(modelDoz);
     refreshDoz();
+
+    ui->tableViewDoz->setModel(modelDoz);
     modelEl = new ModelEl(this);
     ui->comboBoxMar->setModel(modelEl);
     modelRcp = new ModelRcp(this);
     ui->comboBoxRcp->setModel(modelRcp);
-    modelRabDoz = new ModelRab(5,this);
+    modelRabDoz = new ModelRab(this);
     ui->comboBoxRab->setModel(modelRabDoz);
-    modelRabTech = new ModelRab(36,this);
+    modelRabTech = new ModelRab(this);
     ui->comboBoxTech->setModel(modelRabTech);
+
+    refreshRab();
 
     if (ui->tableViewDoz->model()->rowCount()){
         ui->tableViewDoz->selectRow(0);
@@ -27,6 +30,7 @@ MainWidget::MainWidget(QWidget *parent) :
 
     connect(ui->cmdUpd,SIGNAL(clicked(bool)),this,SLOT(refreshDoz()));
     connect(ui->cmdGo,SIGNAL(clicked(bool)),this,SLOT(createLbl()));
+    connect(ui->dateEditDoz,SIGNAL(dateChanged(QDate)),this,SLOT(refreshRab()));
 
     connect(ui->checkBoxNum,SIGNAL(clicked(bool)),ui->spinNum,SLOT(setEnabled(bool)));
     connect(ui->checkBoxNum,SIGNAL(clicked(bool)),ui->spinBoxLst,SLOT(setEnabled(bool)));
@@ -86,4 +90,18 @@ void MainWidget::createLbl()
     }
 
     e.createLblDoz(str,man,prnNum);
+}
+
+void MainWidget::refreshRab()
+{
+    QString tech=ui->comboBoxTech->currentText();
+    QString rab=ui->comboBoxRab->currentText();
+    modelRabDoz->refresh(ui->dateEditDoz->date(),tr("составитель обмазки"));
+    modelRabTech->refresh(ui->dateEditDoz->date(),tr("технолог"));
+    if (!tech.isEmpty()){
+        ui->comboBoxTech->setCurrentText(tech);
+    }
+    if (!rab.isEmpty()){
+        ui->comboBoxRab->setCurrentText(rab);
+    }
 }

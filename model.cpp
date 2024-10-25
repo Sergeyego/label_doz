@@ -67,18 +67,24 @@ void ModelRcp::refresh()
     }
 }
 
-ModelRab::ModelRab(int id_rab, QObject *parent) : id(id_rab), QSqlQueryModel(parent)
+ModelRab::ModelRab(QObject *parent) : QSqlQueryModel(parent)
 {
-    refresh();
+
 }
 
-void ModelRab::refresh()
+void ModelRab::refresh(QDate date, QString prof)
 {
-    setQuery("select r.snam from rab_rab r inner join rab_qual q on q.id_rab=r.id "
-             "inner join rab_prof p on q.id_prof = p.id "
-             "where q.dat = (select max(dat) from rab_qual where dat <= '2999-04-01' "
-             "and id_rab=r.id) and p.id= "+QString::number(id)+" order by r.snam");
-    if (lastError().isValid()){
-        QMessageBox::critical(NULL,tr("Ошибка"),lastError().text(),QMessageBox::Ok);
+    QSqlQuery query;
+    query.prepare("select distinct ke.snam from kamin_get_empl(:d,:d) as ge "
+                  "inner join kamin_empl ke on ke.id = ge.id_empl "
+                  "inner join kamin_job kj on kj.id = ge.id_job "
+                  "where kj.nam ilike('%"+prof+"%') "
+                  "order by ke.snam");
+    query.bindValue(":d",date);
+    if (query.exec()){
+        setQuery(query);
+    } else {
+        QMessageBox::critical(NULL,tr("Ошибка"),query.lastError().text(),QMessageBox::Ok);
     }
 }
+

@@ -28,6 +28,7 @@ private:
 private slots:
     void refreshDoz();
     void createLbl();
+    void refreshRab();
 };
 
 #endif // MAINWIDGET_H
