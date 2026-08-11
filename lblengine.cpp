@@ -18,38 +18,6 @@ LblEngine::LblEngine(QObject *parent) : QObject(parent)
     fileTemp.close();
 }
 
-void LblEngine::createLblEd(QString text, QString barcode)
-{
-    QString templ=QString::fromLocal8Bit("СЗСМ");
-    if (map.value(templ).isNull()){
-        QMessageBox::critical(NULL,tr("Ошибка"),tr("Ошибка шаблона"),QMessageBox::Ok);
-        return;
-    }
-    QDomDocument doc;
-    doc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
-    QDomElement root = doc.createElement("Glabels-document");
-    doc.appendChild(root);
-    root.appendChild(map.value(templ));
-    QDomElement obj = doc.createElement("Objects");
-    obj.setAttribute("id", 0);
-    obj.setAttribute("rotate", "True");
-    root.appendChild(obj);
-
-    obj.appendChild(newText("4mm","35mm","38mm","28.5mm",text,7,true,&doc));
-    obj.appendChild(newImage("6.5mm","4mm","33mm","13mm",dir+"/images/simb.png",&doc));
-    obj.appendChild(newImage("5.5mm","17.5mm","35mm","2.5mm",dir+"/images/site.png",&doc));
-    if (!barcode.isEmpty()) {
-        obj.appendChild(newBarcode("4mm","20.5mm","38mm","17mm",barcode,&doc));
-    }
-    QFile file("lbl.glabels");
-    if ( file.open( QIODevice::WriteOnly ) ) {
-        QTextStream stream( &file );
-        doc.save(stream,1);
-        file.close();
-        system("./runlbl.sh&");
-    }
-}
-
 void LblEngine::createLblDoz(QString text, QString man, bool num)
 {
         QDomDocument doc;

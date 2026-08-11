@@ -20,7 +20,6 @@ class LblEngine : public QObject
     Q_OBJECT
 public:
     explicit LblEngine(QObject *parent = 0);
-    void createLblEd(QString text, QString barcode);
     void createLblDoz(QString text, QString man = QString(), bool num = false);
 
 private:
@@ -35,6 +34,7 @@ private:
 signals:
 
 public slots:
+
 };
 
 #endif // LBLENGINE_H
