@@ -76,8 +76,10 @@ void MainWidget::createLbl()
     str+=ui->lineEditKvo->text()+QString::fromUtf8(" кг")+"\n";
     str+=QString::fromUtf8("Дозировщик ");
     str+=ui->comboBoxRab->currentText()+"\n";
-    str+=QString::fromUtf8("Расфасовщик ");
-    str+=ui->comboBoxPacker->currentText()+"\n";
+    if (!ui->comboBoxPacker->currentText().isEmpty()) {
+        str+=QString::fromUtf8("Расфасовщик ");
+        str+=ui->comboBoxPacker->currentText()+"\n";
+    }
     str+=QString::fromUtf8("Технолог ");
     str+=ui->comboBoxTech->currentText()+"\n";
 
